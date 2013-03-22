@@ -1,4 +1,4 @@
-// Trip Data Animation Generator
+// Trip Data Animation Generator, v2
 // Written by Michael Schade, (c)2013
 // This program requires two files for input:
 // (1) a file that shows trip history data
@@ -6,21 +6,22 @@
 import java.util.Calendar;
 import java.text.*;
 
-// change these 4 values to the boundaries of the screen
+// CHANGE these 4 values to the boundaries of the screen 
 float minLng = -77.158883;  // west
 float maxLng = -76.899047;  // east
 float minLat = 38.803113;  // south
 float maxLat = 38.95482;  // north 
-// change these 2 values to the desired width and height of the movie
+// CHANGE these 2 values to the desired width and height of the movie
 int screenWidth = 480;
 int screenHeight = 360;
-// subtract a margin for the histogram
-int histogramHeight = screenHeight - 100;
+// CHANGE the vertical margin for the histogram
+int histogramHeight = screenHeight - 180;
 // the next 2 values are used to transfer lat/lng degrees into pixels
 float xscale = screenWidth/(maxLng - minLng);
 float yscale = screenHeight/(maxLat - minLat);
 // the "activity" variables are used to build the histogram
-int[] activity = new int[histogramHeight];
+int[] localActivity = new int[histogramHeight];
+int[] globalActivity = new int[histogramHeight];
 int maxActivity = 0;  
 // use a map for the background of the animation
 PImage backgroundImage;
@@ -62,6 +63,18 @@ float lngToX(float lng) {
   // convert longitude degrees to x value in pixels (horizontal)
   return (lng - minLng)*xscale;
   }
+
+float latToY(double lat) {
+  float f = (float)lat;
+  // convert latitude degrees to y value in pixels (vertical)
+  return screenHeight - (f - minLat)*yscale;
+  }
+  
+float lngToX(double lng) {
+  float f = (float)lng;
+  // convert longitude degrees to x value in pixels (horizontal)
+  return (f - minLng)*xscale;
+  }
   
 void drawBackground() { 
   // draw map and al the stations
@@ -72,22 +85,34 @@ void drawBackground() {
     ellipse(lngToX(stations[rs].lng), latToY(stations[rs].lat), 3, 3);
   }    
   
-void drawOverlay(int level, String day, String time, String labek) {  
+void drawOverlay(int level, String day, String time, int bikes1, int bikes2) {  
   // draw histogram
-  int x = screenWidth - 112;
-  int y = 75;
+  int x = 10;
+  int y = 72; 
+  stroke(223, 128, 0);
+  for (int h = 0; h < level; h++)   
+    line(x, y + h, x + 104.0*globalActivity[h]/maxActivity, y + h); 
   stroke(223, 223, 223);
   for (int h = 0; h < level; h++)   
-    line(x, y + h, x + 104.0*activity[h]/maxActivity, y + h); 
-  textSize(22);
+    line(x, y + h, x + 104.0*localActivity[h]/maxActivity, y + h); 
+  textSize(22); 
   fill(0,0,0);  
-  text(day, x+1, 51);  
-  text(time, x+1, 71);  
-  text(labek, x+1, level + 96); 
-  fill(255, 255, 0);  
-  text(day, x, 50);  
-  text(time, x, 70);  
-  text(labek, x, level + 95); 
+  text(day, x+1, y - 24);  
+  text(time, x+1, y - 4); 
+  text(bikes1, x, y + level + 19);  
+  fill(223, 223, 0);  
+  text(day, x+1, y - 25);  
+  text(time, x+1, y - 5); 
+  text(bikes1, x, y + level + 20);   
+  text(bikes1+"/"+bikes2, x+1, y + level + 21); 
+  fill(223, 128, 0);   
+  text(bikes1+"/"+bikes2, x, y + level + 20);  
+  fill(223, 223, 0);  
+  text(day, x, y - 25);  
+  text(time, x, y - 5);  
+  text(bikes1+"/", x, y + level + 20); 
+  fill(223, 223, 223);   
+  text(bikes1, x, y + level + 20); 
   }    
 
 int dateToMinutes(String d) {  
@@ -104,6 +129,12 @@ int dateToMinutes(String d) {
   return round(cal.getTimeInMillis()/60000);
   }
   
+String clock(double time) {    
+  Calendar cal = Calendar.getInstance();   
+  cal.setTimeInMillis((long)time*60000);
+  return String.format("%02d:%02d", cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE));
+  }
+  
 int stationIndex(String value) {
   // input: the name of a station
   // output: its position in the main array
@@ -114,22 +145,23 @@ int stationIndex(String value) {
   return -1; 
   } 
   
-void drawCircle(float x, float y, color dotColor, boolean blended) {
+void drawCircle(float x, float y, color dotColor, boolean blended, int radius) {
+  int di = radius*2 - 1; 
   if (blended) {
     // use a more transparent methos
-    PGraphics tempPage = createGraphics(13, 13, JAVA2D);
+    PGraphics tempPage = createGraphics(di, di, JAVA2D);
     tempPage.beginDraw();
     tempPage.background(0);
     tempPage.noStroke();
     tempPage.fill(dotColor);  
-    tempPage.ellipse(7,7, 13, 13);
+    tempPage.ellipse(radius, radius, di, di);
     tempPage.endDraw();
-    blend(tempPage, 0, 0, 13, 13, round(x), round(y), 13, 13, ADD);
+    blend(tempPage, 0, 0, di, di, round(x) - radius, round(y) - radius, di, di, ADD);
     }
   else {
     // draw circles on top of each other
     fill(dotColor); 
-    ellipse(x, y, 11, 11);
+    ellipse(x, y, di, di);
     }
   }      
   
@@ -157,7 +189,6 @@ void setup() {
   String[] cols;
   int topTrip = 0;  // number of trips we've got stored in trips[]
   size(screenWidth, screenHeight);  // set size of drawing area
-  backgroundImage = loadImage("cabiregion2.png"); 
   XML[] children = loadXML("http://capitalbikeshare.com/data/stations/bikeStations.xml").getChildren("station");
   stations = new Station[children.length + 2];
   String stationName;
@@ -172,8 +203,8 @@ void setup() {
   stations[children.length] = new Station("38.896544", "-77.038862", "White House [17th & State Pl NW]"); 
   stations[children.length + 1] = new Station("38.900343", "-77.032058", "McPherson Square - 14th & H St NW"); 
   //showBounds();
-  /**
-  String stationList[] = loadStrings("betterthanxml.csv");
+  /** use this code if the station list is in CSV format
+  String stationList[] = loadStrings("stationList.csv");
   stations = new Station[stationList.length];
   for (int i = 0; i < stationList.length; i++) {
     cols = split(stationList[i], ",");
@@ -185,12 +216,20 @@ void setup() {
   println("There are " + tripHistory.length + " trips."); 
   Trip trips[] = new Trip[tripHistory.length]; 
   int t1, t2;
-  // these next variables show which column the value is stored in
+  // CHANGE background image for your custom map
+  // see "Made-to-Order Mapmaking" http://www.mvjantzen.com/blog/?p=3266
+   backgroundImage = loadImage("cabiregion2.png"); 
+  // CHANGE to show which column the value is stored in (1st column = 0)
   int startDate = 1;   
   int endDate = 3;   
   int startTerminal = 2;   
   int endTerminal = 4;   
   int subscriberType = 6;    
+  // CHANGE to set start and end dtae/times for the animation
+  int start = dateToMinutes("10/5/2012 16:00");
+  int end = dateToMinutes("10/5/2012 16:10");
+  // CHANGE to assign animation speed (in minutes)
+  double frameInterval = 0.2;  // 0.2 = every 12 seconds
   // go through each line in file and put data in an array
   for (int i = 0; i < tripHistory.length; i++) {
     cols = split(tripHistory[i], ",");
@@ -209,58 +248,68 @@ void setup() {
       }
     }    
   int nextLine = 0; 
-  int activityLevel;  
-  float p;  // portion between two end points; 0 to 1
-  int start = dateToMinutes("10/5/2012 00:00");
-  int end = dateToMinutes("10/5/2012 23:59");
+  int localActivityLevel;  
+  int globalActivityLevel;  
+  double p;  // portion between two end points; 0 to 1
   Calendar cal = Calendar.getInstance(); 
   String folder = "frames" + cal.get(Calendar.HOUR) + "-" + cal.get(Calendar.MINUTE) + "/";  
   println("Time range: " + start + " to " + end); 
   int frame = 0;
   noStroke(); 
-  maxActivity = 307;
+  // CHANGE either assign the histogram's max value, or calculate it using the code below
+  maxActivity = 307; 
   // if you don't know the max level, uncomment the code below
   /**
-  for (int t = start; t < end; t+=1) {
-    activityLevel = 0; 
+  for (double t = startTime; t <= endTime; t += frameInterval) { 
+    globalActivityLevel = 0; 
     for (int i = 0; i < topTrip; i++)  
       if (t >= trips[i].startTime && t <= trips[i].endTime)     
-        activityLevel++;   
-    maxActivity = max(maxActivity, activityLevel);
+        globalActivityLevel++;   
+    maxActivity = max(maxActivity, globalActivityLevel);
     }
   println("Max activity: " + maxActivity); 
   **/  
   // "t" loops through each frame in the animation
-  // t+=1 means we have a new frame for every minute
-  for (int t = start; t < end; t+=1) {
-    println(100*(t - start)/(end - start) + "%, t = " + t);  // show progress in console
+  float pf;
+  double startTime = (double)start;
+  double endTime = (double)end; 
+  for (double t = startTime; t <= endTime; t += frameInterval) { 
+    double timeFactor = (t - startTime)/(endTime - startTime);  
+    println((int)100*timeFactor + "%");  // show progress in console
     drawBackground();
-    activityLevel = 0; 
+    globalActivityLevel = 0; 
+    localActivityLevel = 0; 
+    color c2;
     for (int i = 0; i < topTrip; i++) {  // loop through all trips
-      if (t >= trips[i].startTime && t <= trips[i].endTime) {  
-        p = float(t - trips[i].startTime)/float(trips[i].endTime - trips[i].startTime); 
+      double ds = (double)trips[i].startTime;
+      double de = (double)trips[i].endTime; 
+      if (t >= ds && t <= de) {  
         int s1 = trips[i].startStation;  
         int s2 = trips[i].endStation;  
-        drawCircle(lngToX(stations[s1].lng + (stations[s2].lng - stations[s1].lng)*p),
-                   latToY(stations[s1].lat + (stations[s2].lat - stations[s1].lat)*p),
-                   (trips[i].riderType == 'R') ? color(int(255*p), 0, 255, 191) : color(int(255*p), 255, 00, 191), 
-                   false);
-        activityLevel++;  
-        }
+        double tripFactor = (t - ds)/(de - ds);
+        float xPos = lngToX(stations[s1].lng + (stations[s2].lng - stations[s1].lng)*tripFactor);
+        float yPos = latToY(stations[s1].lat + (stations[s2].lat - stations[s1].lat)*tripFactor); 
+        if (xPos >= -5 && xPos < screenWidth + 5 && yPos >= -5 && yPos < screenHeight + 5) {
+          drawCircle(xPos, yPos, 
+            (trips[i].riderType == 'R') ? color(0, 0, 255, 191) : color(0, 255, 0, 191),
+            false, 5);
+          localActivityLevel++;  
+          } 
+        globalActivityLevel++;  
+        } 
       }    
-    if (int(float(histogramHeight)*(t - start)/(end - start)) == nextLine) { 
-      activity[nextLine] = activityLevel;
+    if (floor((float)histogramHeight*(float)timeFactor) == nextLine) { 
+      globalActivity[nextLine] = globalActivityLevel;
+      localActivity[nextLine] = localActivityLevel;
       nextLine++;
-      }
-    int clock = t - start;  // assume starting at midnight 
-    int hour = floor(clock/60); 
-    int min = clock % 60;  
+      }  
     drawOverlay(nextLine - 1, 
-      "10.5.12", 
-      ((hour < 10) ? " " : "") + hour + ":" + ((min < 10) ? "0" : "") + min, 
-      str(activityLevel) + " bike" + ((activityLevel == 1) ? "" : "s"));
+      "10.5.12", clock(t),
+      localActivityLevel, globalActivityLevel);
+      //str(globalActivityLevel) + " bike" + ((globalActivityLevel == 1) ? "" : "s"));
     saveFrame(folder + "image-" + nf(frame++, 5) + ".png");
     }  
+  println("Complete!");
   }
 
 void draw() {  // Add window's pixels to movie 
