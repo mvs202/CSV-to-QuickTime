@@ -1,6 +1,7 @@
 // Data Animation Generator, v2
 // Written by Michael Schade, (c)2013 
 import java.util.*;  
+import java.text.SimpleDateFormat;
 // get data from http://mvjantzen.com/cabi/cabixmlbuild.php
 // add White House manually: 38.896494, -77.038947, 31210
 String[] stopName = {"White House","20th & Bell St","18th & Eads St.","20th & Crystal Dr","15th & Crystal Dr","Aurora Hills Community Ctr/18th & Hayes St","Pentagon City Metro / 12th & S Hayes St","S Joyce & Army Navy Dr","Crystal City Metro / 18th & Bell St","12th & Army Navy Dr","27th & Crystal Dr","S Glebe & Potomac Ave","23rd & Crystal Dr","26th & S Clark St","19th St & Pennsylvania Ave NW","14th & V St NW","11th & Kenyon St NW","16th & Harvard St NW","Adams Mill & Columbia Rd NW","14th & Harvard St NW","Calvert & Biltmore St NW","Lamont & Mt Pleasant NW","4th & M St SW","15th & P St NW","14th & R St NW","14th & Rhode Island Ave NW","20th & E St NW","21st & I St NW","Georgia & New Hampshire Ave NW","14th St & Spring Rd NW","John McCormack Dr & Michigan Ave NE","5th & K St NW","19th & East Capitol St SE","Park Rd & Holmead Pl NW","Good Hope & Naylor Rd SE","Connecticut Ave & Newark St NW / Cleveland Park","Randle Circle & Minnesota Ave SE","Minnesota Ave Metro/DOES","Nannie Helen Burroughs & Minnesota Ave NE","Anacostia Metro","Good Hope Rd & MLK Ave SE","19th & E Street NW","4th & W St NE","10th & U St NW","Georgia Ave and Fairmont St NW","1st & N St  SE","20th St & Florida Ave NW","7th & T St NW","22nd & Eads St","M St & New Jersey Ave SE","Massachusetts Ave & Dupont Circle NW","1st & M St NE","21st & M St NW","17th & K St NW","3rd & H St NW","3rd & D St SE","Potomac & Pennsylvania Ave SE","14th & D St SE","17th & Corcoran St NW","Van Ness Metro / UDC","Florida Ave & R St NW","8th & Eye St SE / Barracks Row","Ward Circle / American University","Idaho Ave & Newark St NW [on 2nd District patio]","14th St Heights / 14th & Crittenden St NW","Anacostia Library","Pennsylvania & Minnesota Ave SE","Eastern Market / 7th & North Carolina Ave SE","14th St & New York Ave NW","Benning Branch Library","USDA / 12th & Independence Ave SW","Georgetown Harbor / 30th St NW","12th & Newton St NE","US Dept of State / Virginia Ave & 21st St NW","L'Enfant Plaza / 7th & C St SW","10th St & Constitution Ave NW","Kennedy Center","Eastern Market Metro / Pennsylvania Ave & 7th St SE","18th & M St NW","Tenleytown / Wisconsin Ave & Albemarle St NW","13th & H St NE","5th & F St NW","New York Ave & 15th St NW","Convention Center / 7th & M St NW","Harvard St & Adams Mill Rd NW","19th & L St NW","C & O Canal & Wisconsin Ave NW","6th & Water St SW / SW Waterfront","D St & Maryland Ave NE","34th St & Wisconsin Ave NW","13th St & New York Ave NW","8th & H St NW","10th & Monroe St NE","Eckington Pl & Q St NE","6th & H St NE","3rd & H St NE","Bladensburg Rd & Benning Rd NE","4th & East Capitol St NE","Lincoln Park / 13th & East Capitol St NE ","Branch & Pennsylvania Ave SE","13th & D St NE","New Hampshire Ave & T St NW","Metro Center / 12th & G St NW","14th & D St NW / Ronald Reagan Building","8th & F St NW / National Portrait Gallery","17th & K St NW / Farragut Square","20th & O St NW / Dupont South","4th & D St NW / Judiciary Square","19th St & Constitution Ave NW","37th & O St NW / Georgetown University","11th & H St NE","25th St & Pennsylvania Ave NW","Columbus Circle / Union Station","North Capitol St & F St NW","11th & M St NW","36th & Calvert St NW / Glover Park","14th & G St NW","Potomac Ave & 35th St S","Ohio Dr & West Basin Dr SW / MLK & FDR Memorials","11th & F St NW","23rd & E St NW ","Lynn & 19th St North","Rosslyn Metro / Wilson Blvd & Ft Myer Dr","Clarendon Blvd & Pierce St","Wilson Blvd & N Uhle St","N Rhodes & 16th St N","Fairfax Village","21st St & Constitution Ave NW","Wilson Blvd & N Edgewood St","Columbia Rd & Belmont St NW","17th & Rhode Island Ave NW","Thomas Circle","Wilson Blvd & Franklin Rd","Clarendon Blvd & N Fillmore St","Clarendon Metro / Wilson Blvd & N Highland St","18th St & Pennsylvania Ave NW","Maryland & Independence Ave SW","4th & E St SW","3rd & G St SE","7th & R St NW / Shaw Library","9th & Upshur St NW","1st & Rhode Island Ave NW","Columbia Rd & Georgia Ave NW","California St & Florida Ave NW","Benning Rd & East Capitol St NE / Benning Rd Metro","3000 Connecticut Ave NW / National Zoo","Anacostia Ave & Benning Rd NE / River Terrace ","M St & Pennsylvania Ave NW","15th St & Massachusetts Ave SE","Congress Heights Metro","N Quincy St & Glebe Rd","Wilson Blvd & N Oakland St","N Veitch  & 20th St N","11th & K St NW","Fairfax Dr & Wilson Blvd","Key Blvd & N Quinn St","1st & K St SE","39th & Calvert St NW / Stoddert","1st & Washington Hospital Center NW","Virginia Square Metro / N Monroe St & 9th St N","Central Library / N Quincy St & 10th St N","Washington Blvd & 10th St N","Jefferson Dr & 14th St SW","Smithsonian / Jefferson Dr & 12th St SW","George Mason Dr & Wilson Blvd","6th St & Indiana Ave NW","N Veitch & Key Blvd","N Adams St & Lee Hwy","15th & N Scott St","Washington Blvd & 7th St N","Ballston Metro / N Stuart & 9th St N","N Randolph St & Fairfax Dr","Jefferson Memorial","Good Hope Rd & 14th St SE","Glebe Rd & 11th St N","N Quincy St & Wilson Blvd","Fairfax Dr & Kenmore St","Gallaudet / 8th St & Florida Ave NE","20th & L St NW","12th & L St NW","21st St & Pennsylvania Ave NW","19th & K St NW","Prince St & Union St","Market Square / King St & Royal St","Saint Asaph St & Pendleton  St","King St & Patrick St","15th & K St NW","Commerce St & Fayette St","Henry St & Pendleton St","Braddock Rd Metro","King St Metro","24th & N St NW","10th & E St NW","22nd & I St NW / Foggy Bottom","Utah St & 11th St N ","Barton St & 10th St N","Arlington Blvd & N Queen St","Lincoln Memorial","20th St & Virginia Ave NW","5th St & Massachusetts Ave NW","39th & Veazey St NW","Fessenden St & Wisconsin Ave NW","M St & Delaware Ave NE","Columbia Pike & S Courthouse Rd","Walter Reed Community Center / Walter Reed Dr & 16th St S","28th St S & S Meade St","18th St & Wyoming Ave NW","5th & Kennedy St NW","Georgia Ave & Emerson St NW","14th & Upshur St NW","14th St & Colorado Ave NW","S Troy St & 26th St S","S Four Mile Run Dr & S Shirlington Rd","S Oakland St & Columbia Pike","S Abingdon St & 36th St S","S Arlington Mill Dr & Campbell Ave","S Kenmore & 24th St S","13th St & Eastern Ave","Wisconsin Ave & O St NW","S George Mason Dr & 13th St S","Connecticut & Nebraska Ave NW","17th St & Massachusetts Ave NW","15th & Euclid St  NW","8th & East Capitol St NE","New Jersey Ave & R St NW","15th & East Capitol St NE","8th & F St NE","18th St & Rhode Island Ave NE","15th & F St NE","12th & Irving St NE","34th St & Minnesota Ave SE","Alabama & MLK Ave SE","Pleasant St & MLK Ave SE","Neal St & Trinidad Ave NE","12th & U St NW","S George Mason Dr & Four Mile Run","S Stafford & 34th St S","N Pershing Dr & Wayne St","Columbia Pike & S Orme St","3rd St & Pennsylvania Ave SE","8th & D St NW","3rd & Elm St NW","Rhode Island Ave & V St NE","Constitution Ave & 2nd St NW/DOL","Washington & Independence Ave SW/HHS","Independence Ave & L'Enfant Plaza SW/DOE","Hamlin & 7th St NE","Columbia Pike & S Walter Reed Dr","Columbia Pike & S Dinwiddie St / Arlington Mill Community Center","Pershing & N George Mason Dr","Fenton St & New York Ave ","Bethesda Ave & Arlington Rd","Montgomery Ave & Waverly St ","Fallsgrove Blvd & Fallsgrove Dr","Traville Gateway Dr & Gudelsky Dr","Norfolk Ave & Fairmont St","E Montgomery Ave & Maryland Ave","Cordell & Norfolk Ave","Frederick Ave & Horners Ln","Philadelphia & Maple Ave","Maple & Ritchie Ave","Silver Spring Metro/Colesville Rd & Wayne Ave","Montgomery & East Ln","Friendship Hts Metro/Wisconsin Ave & Wisconsin Cir","14th & Belmont St NW","3rd & Tingey St SE","10th & Florida Ave NW","Potomac Ave & 8th St SE","Crabbs Branch Way & Redland Rd","Fallsgrove Dr & W Montgomery Ave","Monroe St & Monroe Pl","Needwood Rd & Eagles Head Ct","East West Hwy & Blair Mill Rd","Crabbs Branch Way & Calhoun Pl","47th & Elm St","Garland Ave & Walden Rd","Montgomery College/W Campus Dr & Mannakee St","Fenton St & Gist Ave","Carroll & Westmoreland Ave","Carroll & Ethan Allen Ave","Battery Ln & Trolley Trail","Norfolk & Rugby Ave","Offutt Ln & Chevy Chase Dr","Broschart & Blackwell Rd","Taft St & E Gude Dr","Fleet St & Ritchie Pkwy","Piccard & W Gude Dr","Ripley & Bonifant St","Georgia Ave & Spring St","Fenton St & Ellsworth Dr ","King Farm Blvd & Pleasant Dr","King Farm Blvd & Piccard Dr","Calvert St & Woodley Pl NW","New Jersey Ave & N St NW/Dunbar HS","Nannie Helen Burroughs Ave & 49th St NE","Deanwood Rec Center","Hains Point/Buckeye & Ohio Dr SW","Arlington Blvd & Fillmore St","Long Bridge Park/Long Bridge Dr & 6th St S","Old Georgetown Rd & Southwick St","Friendship Blvd & Willard Ave","North Capitol St & G Pl NE","31st & Woodrow St S","Washington Blvd & Walter Reed Dr ","TJ Cmty Ctr / 2nd St & S Old Glebe Rd","Connecticut Ave & Tilden St NW","Medical Center Dr & Key West Ave","Shady Grove Hospital","Veterans Pl & Pershing Dr ","Rockville Metro East","1st & H St NW","Fort Totten Metro","Takoma Metro","Rhode Island Ave Metro","Rolfe St & 9th St S","Shirlington Transit Center / S Quincy & Randolph St","Shady Grove Metro West","River Rd & Landy Ln","Rockville Metro West","Bethesda Metro","Iwo Jima Memorial/N Meade & 14th St N","34th & Water St NW","Duke St & John Carlyle St","Lee Hwy & N Cleveland St","Arlington Blvd & S George Mason Dr/NFATC","MLK Library/9th & G St NW","Lee Hwy & N Scott St","New Hampshire Ave & 24th St NW","Eisenhower Ave & Mill Race Ln","Potomac Greens Dr & Slaters Ln","Ballenger Ave & Dulaney St","Mount Vernon Ave & E Nelson Ave","Mount Vernon Ave & E Del Ray Ave","Monroe Ave & Leslie Ave","Mount Vernon Ave & Kennedy St","Court House Metro / 15th & N Uhle St ","Washington Adventist U / Flower Ave & Division St","6th & S Ball St","McKinley St & Connecticut Ave NW","15th & L St NW","17th & G St NW","Spring St & Second Ave","18th & R St NW","S Joyce & 16th St S","Union Market/6th St & Neal Pl NE","N Nelson St & Lee Hwy","21st St N & N Pierce St"};
@@ -45,19 +46,57 @@ int displayMethod;
 int CHARCOAL = 0;
 int CLUSTER = 1;
 int RIDERTYPE = 2;
+int BALANCES = 3;
+int SWEEP = 4;
+float[][] tripControlX;
+float[][] tripControlY;
+  int ridersLeaving;
+  int ridersStaying;
+  int ridersEntering;
+  float[] stationX;
+  float[] stationY; 
+Calendar minDate, maxDate;
+Boolean noDatesSet = true;
+Boolean lightmap = true;  // map is lightcolored, not dark (font color depends on this)
+int[][] balances; 
+int[] balanceSum; 
+String dataTitle;
+String subTitle;
+int SECONDSperDAY = 60*60*24;
   
 public class CaBiTrip { 
   public int bikeoutStation;
   public int bikeinStation;
-  public int bikeoutTime;
+  public int bikeoutTime; 
   public int bikeinTime;
+  public Boolean acrossMidnight;  // set to true if you want cross-midnight trips to be shown both in the morning and at night
+  public Calendar bikeoutDayTime;
+  public Calendar bikeinDayTime;
   public Boolean isRegistered; 
-  public CaBiTrip(int stationA, int stationB, int timeA, int timeB, Boolean r) { 
+  public CaBiTrip(int stationA, int stationB, String timeA, String timeB, Boolean r) { 
     bikeoutStation = stationA;
     bikeinStation = stationB;
-    bikeoutTime = timeA;
-    bikeinTime = timeB;
-    if (bikeinTime < bikeoutTime) bikeinTime += 60*060*24;  // bike was returned the next day
+    bikeoutTime = secondsPastMidnight(timeA);
+    bikeinTime = secondsPastMidnight(timeB);
+    if (bikeinTime < bikeoutTime) {
+      bikeinTime += SECONDSperDAY;  // bike was returned the next day
+      acrossMidnight = true;
+      }
+    else
+      acrossMidnight = false;
+    bikeoutDayTime = stringToCalendar(timeA);
+    bikeinDayTime = stringToCalendar(timeB);
+    if (noDatesSet) {
+      minDate = (Calendar) bikeoutDayTime.clone();  // God I hate Java
+      maxDate = (Calendar) bikeinDayTime.clone();
+      noDatesSet = false;
+      }
+    else {
+      if (bikeoutDayTime.before(minDate))
+        minDate = (Calendar) bikeoutDayTime.clone();
+      if (bikeinDayTime.after(maxDate))
+        maxDate = (Calendar) bikeinDayTime.clone();
+      }
     isRegistered = r;
     }     
   }
@@ -79,6 +118,13 @@ public class cabiCircle implements Comparable<cabiCircle> {
     }     
   }
 
+Calendar stringToCalendar(String time) {
+  String[] daytime = split(time, " ");
+  String[] mdy = split(daytime[0], "/");  
+  String[] hm = split(daytime[1], ":");
+  return new GregorianCalendar(parseInt(mdy[2]), parseInt(mdy[0]) - 1, parseInt(mdy[1]), parseInt(hm[0]), parseInt(hm[1]), 0);
+  }
+
 float toY(float lat) {
   return sheight - sheight*(lat - minLat)/(maxLat - minLat);
   }
@@ -87,10 +133,37 @@ float toX(float lng) {
   return swidth*(lng - minLng)/(maxLng - minLng);
   } 
 
-void drawBackground() {
+void drawStations(int f) {
+  // f is used only if displayMethod == BALANCES
+  // draw all the stations
   int radius;
   int traffic;
-  if (displayMethod == CHARCOAL) {
+  color fillColor;
+  if (displayMethod == BALANCES) {
+    for (int i = 0; i < stations.length; i++) { 
+      radius = round(4*sqrt(abs(balanceSum[i])/PI)); 
+      if (balanceSum[i] > 0)
+        fill(255, 0, 0, 127);
+      else
+        fill(0, 255, 0, 127);
+      if (balanceSum[i] > 0)
+        fillColor = color(0, 215, 12, 107);  
+      else
+        fillColor = color(223, 0, 4, 107);     
+      drawCircle(toX(lngs[i]), toY(lats[i]), fillColor, true, radius);
+      } 
+    for (int i = 0; i < stations.length; i++) {  
+      if (balanceSum[i] > 0)
+        fill(0, 223, 8);
+      else if (balanceSum[i] < 0)
+        fill(223, 0, 8);
+      else
+        fill(223, 223, 16); 
+      ellipse(toX(lngs[i]), toY(lats[i]), 5, 5);  
+      balanceSum[i] += balances[i][f];
+      } 
+    }
+  else if (displayMethod == CHARCOAL) {
     cabiCircle[] circles = new cabiCircle[stations.length];
     strokeWeight(3);
     fill(241, 89, 42);
@@ -123,34 +196,34 @@ void drawBackground() {
     maxBusiest = max(maxBusiest, busiestStation);
     } 
   else {
-  strokeWeight(3);
-  fill(241, 89, 42);
-  int busiestStation = 0;
-  int[] tripsToFromStation = new int[stations.length];
-  for (int i = 0; i < stations.length; i++) {
-    tripsToFromStation[i] = 0;
-    for (int j = 0; j < stations.length; j++) {
-      traffic = tripRiders[i][j] + tripRidersCas[i][j] + tripRiders[j][i] + tripRidersCas[j][i];
-      tripsToFromStation[i] += traffic;
+    strokeWeight(3);
+    fill(241, 89, 42);
+    int busiestStation = 0;
+    int[] tripsToFromStation = new int[stations.length];
+    for (int i = 0; i < stations.length; i++) {
+      tripsToFromStation[i] = 0;
+      for (int j = 0; j < stations.length; j++) {
+        traffic = tripRiders[i][j] + tripRidersCas[i][j] + tripRiders[j][i] + tripRidersCas[j][i];
+        tripsToFromStation[i] += traffic;
+        }
+      busiestStation = max(busiestStation, tripsToFromStation[i]);
       }
-    busiestStation = max(busiestStation, tripsToFromStation[i]);
-    }
-  for (int rs = 0; rs < stations.length; rs++) { 
-    if (stationInFocus[rs]) 
-      radius = 9;
-    else
-      radius = 6;
-    if (stationInUse[rs]) {
-      stroke(0, 255);
-      fill(255, 255); 
-      }
-    else {  
-      stroke(0, 159);
-      fill(255, 159); 
-      }
-    ellipse(toX(lngs[rs]), toY(lats[rs]), radius, radius);
-    } 
-  maxBusiest = max(maxBusiest, busiestStation);
+    for (int rs = 0; rs < stations.length; rs++) { 
+      if (stationInFocus[rs]) 
+        radius = 7;
+      else
+        radius = 6;
+      if (stationInUse[rs]) {
+        stroke(0, 255);
+        fill(255, 255); 
+        }
+      else {  
+        stroke(0, 159);
+        fill(255, 159); 
+        }
+      ellipse(toX(lngs[rs]), toY(lats[rs]), radius, radius);
+      } 
+    maxBusiest = max(maxBusiest, busiestStation);
     }
   }   
   
@@ -158,8 +231,16 @@ Boolean EastoftheRiver(int x) {
   return (x >= 31700 && x <= 31807);
   }
   
-Boolean Virginia(int x) {
+Boolean isVirginia(int x) {
   return (x >= 31000 && x <= 31077);
+  }
+  
+Boolean isArlington(int x) {
+  return ((x >= 31000 && x <= 31040) || (x >= 31049 && x <= 31080) || (x >= 31089 && x <= 31090));
+  } 
+  
+Boolean isMaryland(int x) {
+  return (x >= 32000 && x <= 33000); 
   }
   
 Boolean isCrystalCity(int x) {
@@ -181,82 +262,133 @@ Boolean inZone(int x) {
   //return (x == 31217 || x == 31235 || x == 31243 || x == 31247 || x == 31248 || x == 31240 || x == 31249 || x == 31258 || x == 31261 || x == 31271 || x == 31273 || x == 31633 || x == 31272);
   }
 
-void drawHistogram(int frame) {
+void drawKey(String timestamp) {
+  float scale = 32;
+  textSize(12); 
+  if (lightmap)
+    fill(0,0,0);
+  else
+    fill(255,255,255);
+  textAlign(LEFT, BOTTOM);
+  pushMatrix();  
+  translate(swidth - 2, sheight - 4);
+  rotate(-HALF_PI);
+  text("©Mobility Lab", 0, 0);
+  popMatrix();   
+  fill(255,0,0); 
+  int TitleY; 
+  if (displayMethod == CLUSTER || displayMethod == SWEEP)
+    TitleY = sheight - 53; 
+  else
+    TitleY = sheight - 37;
   textAlign(RIGHT); 
-  textSize(16); 
-  strokeText(movieTitle, swidth - 10, sheight - 56);
-  textSize(14);
-  strokeText("Jan 1 - Sep 30, 2014", swidth - 10, sheight - 37); 
-  if (displayMethod == CHARCOAL) { 
-    textSize(28);
-    strokeText(toHHMM(frame), swidth - 10, sheight - 9); 
+  textSize(18);  
+  strokeText(movieTitle, swidth - 14, TitleY - 29);
+  textSize(14.5);
+  strokeText(subTitle, swidth - 14, TitleY - 13); 
+  textSize(11.5);
+  strokeText(dataTitle, swidth - 14, TitleY); 
+  if (displayMethod == SWEEP) { 
+    textSize(12);
+    strokeText(timestamp, swidth - 14, sheight - 4); 
     }
-  int scale = 36;
+  else if (displayMethod == BALANCES) { 
+    textSize(14);
+    strokeText(timestamp, swidth - 14, sheight - 9); 
+    }
+  else if (displayMethod == CHARCOAL) { 
+    textSize(28);
+    strokeText(timestamp, swidth - 14, sheight - 9); 
+    }
   strokeWeight(1);
   int midpoint;
   int midpoint2;
-  int baseline = sheight - 15;
-  int leftEdge = 20;
-  for (int h = 0; h < tickCount; h = h+1) {
-    stroke(c1);
-    midpoint = baseline - groupA[h]/scale;
-    line(leftEdge + h, baseline, leftEdge + h, midpoint);
-    stroke(c2);
-    line(leftEdge + h, midpoint - 1, leftEdge + h, midpoint - 1 - groupB[h]/scale);
+  int baseline = sheight - 19;
+  int leftEdge = 8;
+  if (displayMethod == RIDERTYPE) { 
+    for (int h = 0; h < tickCount; h = h+1) {
+      stroke(c1);
+      midpoint = baseline - round((float) groupA[h]/scale);
+      line(leftEdge + h, baseline, leftEdge + h, midpoint);
+      stroke(c2);
+      line(leftEdge + h, midpoint - 1, leftEdge + h, midpoint - 1 - groupB[h]/scale);
+      }
+    textSize(12);
+    textAlign(CENTER);
+    strokeText(timestamp, leftEdge + tickCount, sheight - 3);
+    // now draw the key
+    textAlign(RIGHT); 
+    strokeText(str(groupA[tickCount - 1]), swidth - 86, sheight - 4); // should be from current data, not histogram - FIX
+    strokeText(str(groupB[tickCount - 1]), swidth - 86, sheight - 20); 
+    fill(c1); 
+    noStroke();
+    rect(swidth - 84, sheight - 17, 70, 14, 3);
+    fill(c2); 
+    rect(swidth - 84, sheight - 32, 70, 14, 3);
+    textAlign(CENTER);
+    if (lightmap)
+      fill(255); 
+    else
+      fill(0); 
+    text("registered", swidth - 49, sheight - 5);   
+    text("casual", swidth - 49, sheight - 21); 
     }
-  for (int h = 0; h < 0*tickCount; h = h+1) {
-    stroke(leavingColorSolid);
-    midpoint = baseline - outof[h]/scale;
-    midpoint2 = midpoint - within[h]/scale;
-    line(leftEdge + h, baseline, leftEdge + h, midpoint);
-    stroke(stayingColorSolid);
-    line(leftEdge + h, midpoint - 1, leftEdge + h, midpoint2);
-    stroke(enteringColorSolid);
-    line(leftEdge + h, midpoint2 - 1, leftEdge + h, midpoint2 - into[h]/scale);
+  else if (displayMethod == SWEEP) {
+    for (int h = 0; h < tickCount; h = h+1) {
+      stroke(c1);
+      midpoint = baseline - round((float) groupA[h]/scale);
+      line(leftEdge + h, baseline, leftEdge + h, midpoint);
+      stroke(c2);
+      line(leftEdge + h, midpoint - 1, leftEdge + h, midpoint - 1 - groupB[h]/scale);
+      } 
+    // now draw the key
+    textAlign(RIGHT); 
+    strokeText(str(groupA[tickCount - 1]), swidth - 86, sheight - 19); // should be from current data, not histogram - FIX
+    strokeText(str(groupB[tickCount - 1]), swidth - 86, sheight - 35); 
+    fill(c1); 
+    noStroke();
+    rect(swidth - 84, sheight - 32, 70, 14, 3); 
+    fill(c2); 
+    rect(swidth - 84, sheight - 47, 70, 14, 3);
+    fill(255); 
+    textAlign(CENTER);
+    text("registered", swidth - 49, sheight - 19);   
+    text("casual", swidth - 49, sheight - 35); 
     }
-  textSize(12);
-  textAlign(CENTER);
-  strokeText(toHHMM(frame), leftEdge + tickCount, sheight - 3);
-  // now draw the key
-  textAlign(RIGHT); 
-  strokeText(str(groupA[tickCount - 1]), swidth - 82, sheight - 4); // should be from current data, not histogram - FIX
-  strokeText(str(groupB[tickCount - 1]), swidth - 82, sheight - 20); 
-  fill(c1); 
-  noStroke();
-  rect(swidth - 80, sheight - 17, 70, 14, 3);
-  fill(c2); 
-  rect(swidth - 80, sheight - 32, 70, 14, 3);
-  fill(255); 
-  textAlign(CENTER);
-  text("registered", swidth - 45, sheight - 5);   
-  text("casual", swidth - 45, sheight - 21); 
-   /*
-  strokeText(movieTitle, swidth - 10, sheight - 69);
-  textSize(12);
-  strokeText("Jul 1 - Sep 30, 2014", swidth - 10, sheight - 52); 
-  textAlign(RIGHT); 
-  strokeText(str(into[tickCount - 1]), swidth - 118, sheight - 36);  
-  strokeText(str(within[tickCount - 1]), swidth - 118, sheight - 20);  
-  strokeText(str(outof[tickCount - 1]), swidth - 118, sheight - 4); 
-  int totalTrips = into[tickCount - 1] + within[tickCount - 1] + outof[tickCount - 1];
-  if (totalTrips > 0) {
-    strokeText("(" + str(round(100.0*into[tickCount - 1]/totalTrips)) + "%)", swidth - 82, sheight - 36);  
-    strokeText("(" + str(round(100.0*within[tickCount - 1]/totalTrips)) + "%)", swidth - 82, sheight - 20);  
-    strokeText("(" + str(round(100.0*outof[tickCount - 1]/totalTrips)) + "%)", swidth - 82, sheight - 4); 
-    }
-  noStroke();
-  fill(enteringColorSolid); 
-  rect(swidth - 80, sheight - 47, 70, 14, 3);
-  fill(stayingColorSolid); 
-  rect(swidth - 80, sheight - 32, 70, 14, 3);
-  fill(leavingColorSolid); 
-  rect(swidth - 80, sheight - 17, 70, 14, 3);
-  fill(255); 
-  textAlign(CENTER);
-  text("entering", swidth - 45, sheight - 36);   
-  text("within", swidth - 45, sheight - 21); 
-  text("leaving", swidth - 45, sheight - 5); 
-  */
+  else if (displayMethod == CLUSTER) { 
+    for (int h = 0; h < 0*tickCount; h = h+1) {
+      stroke(leavingColorSolid);
+      midpoint = baseline - round((float) outof[h]/scale); 
+      midpoint2 = baseline - round((float) within[h]/scale);  
+      line(leftEdge + h, baseline, leftEdge + h, midpoint);
+      stroke(stayingColorSolid);
+      line(leftEdge + h, midpoint - 1, leftEdge + h, midpoint2);
+      stroke(enteringColorSolid);
+      line(leftEdge + h, midpoint2 - 1, leftEdge + h, midpoint2 - into[h]/scale);
+      }
+    textAlign(RIGHT); 
+    strokeText(str(into[tickCount - 1]), swidth - 118, sheight - 36);  
+    strokeText(str(within[tickCount - 1]), swidth - 118, sheight - 20);  
+    strokeText(str(outof[tickCount - 1]), swidth - 118, sheight - 4); 
+    int totalTrips = into[tickCount - 1] + within[tickCount - 1] + outof[tickCount - 1];
+    if (totalTrips > 0) {
+      strokeText("(" + str(round(100.0*into[tickCount - 1]/totalTrips)) + "%)", swidth - 82, sheight - 36);  
+      strokeText("(" + str(round(100.0*within[tickCount - 1]/totalTrips)) + "%)", swidth - 82, sheight - 20);  
+      strokeText("(" + str(round(100.0*outof[tickCount - 1]/totalTrips)) + "%)", swidth - 82, sheight - 4); 
+      }
+    noStroke();
+    fill(enteringColorSolid); 
+    rect(swidth - 80, sheight - 47, 70, 14, 3);
+    fill(stayingColorSolid); 
+    rect(swidth - 80, sheight - 32, 70, 14, 3);
+    fill(leavingColorSolid); 
+    rect(swidth - 80, sheight - 17, 70, 14, 3);
+    fill(255); 
+    textAlign(CENTER);
+    text("entering", swidth - 45, sheight - 36);   
+    text("within", swidth - 45, sheight - 21); 
+    text("leaving", swidth - 45, sheight - 5); 
+    } 
   }
 
 String toHHMM(int seconds) {
@@ -276,12 +408,11 @@ String toHHMM(int seconds) {
   return hh + ":" + mm;
   }
 
-int timeToSeconds(String time) { 
+int secondsPastMidnight(String time) { 
+  // return the number of seconds since midnight
   String[] daytime = split(time, " ");
-  String[] mdy = split(daytime[0], "/"); 
+  //String[] mdy = split(daytime[0], "/"); 
   String[] hm = split(daytime[1], ":");
-  if (hm.length < 2)
-    return -1;
   return 3600*parseInt(hm[0]) + 60*parseInt(hm[1]);
   } 
 
@@ -323,17 +454,31 @@ void gradientBezier(float x1, float y1, float midx, float midy, float x2, float 
   }
   
 void strokeText(String message, int x, int y) { 
-  fill(255); 
-  text(message, x-2, y); 
-  text(message, x, y-2); 
-  text(message, x+2, y); 
-  text(message, x, y+2); 
-  fill(0); 
-  text(message, x, y); 
+  if (lightmap) {
+    fill(255); 
+    text(message, x-2, y); 
+    text(message, x, y-2); 
+    text(message, x+2, y); 
+    text(message, x, y+2); 
+    fill(0); 
+    text(message, x, y); 
+    }
+  else {
+    fill(0,0,0, 128);  
+    text(message, x+2, y+2);  
+    fill(255); 
+    text(message, x, y); 
+    }
   } 
 
 void getStats() {
   CaBiTrip trip;
+  int toCC = 0;
+  int toArl = 0;
+  int toAlex = 0;
+  int toDC = 0;
+  int toMD = 0;
+  int fromSelection = 0;
   int[] tripsPerStation = new int[stations.length]; 
   int[] casualTripsPerStation = new int[stations.length]; 
   int totalTrips = 0;
@@ -344,6 +489,14 @@ void getStats() {
     }
   for (int t = 0; t < validTrips.size(); t++) { 
     trip = validTrips.get(t);
+    if (isGreaterCrystalCity(stations[trip.bikeoutStation])) {
+      if (isGreaterCrystalCity(stations[trip.bikeinStation])) toCC++;
+      else if (isArlington(stations[trip.bikeinStation])) toArl++;
+      else if (isVirginia(stations[trip.bikeinStation])) toAlex++;
+      else if (isMaryland(stations[trip.bikeinStation])) toMD++;
+      else   toDC++;
+      fromSelection++;
+      }
     if (!trip.isRegistered) {
       casualTripsPerStation[trip.bikeoutStation]++;
       casualTripsPerStation[trip.bikeinStation]++;
@@ -359,6 +512,13 @@ void getStats() {
     totalCasualTrips += casualTripsPerStation[i];
     }
   println(round(1000.0*totalCasualTrips/totalTrips)/10.0 + ": TOTAL (" + totalTrips + ")");
+  println("***********************************");
+  println(toCC + " toCC (" + (float)toCC/fromSelection + ")");
+  println(toArl + " toArl (" + (float)toArl/fromSelection + ")");
+  println(toAlex + " toAlex (" + (float)toAlex/fromSelection + ")");
+  println(toDC + " toDC (" + (float)toDC/fromSelection + ")");
+  println(toMD + " toMD (" + (float)toMD/fromSelection + ")");
+  println(fromSelection + " total");
   println("***********************************");
   }
 
@@ -395,7 +555,7 @@ void setDatasource(String csvFile, int outStation, int inStation, int outTime, i
       if (stationA >= stations.length || stationB >= stations.length)
         println("ERROR: BAD STATION: " + trips[t]);
       else if ((stationInFocus[stationA] || stationInFocus[stationB])) {
-        validTrips.add(new CaBiTrip(stationA, stationB, timeToSeconds(cols[outTime]), timeToSeconds(cols[inTime]), cols[reg].equals("Registered")));
+        validTrips.add(new CaBiTrip(stationA, stationB, cols[outTime], cols[inTime], !cols[reg].equals("Casual")));
         newCount++; 
         }  
       }
@@ -458,9 +618,39 @@ List<Integer> q7th() {
   return list;
   }
   
+List<Integer> gmu() {
+  List<Integer> list = new ArrayList<Integer>(stations.length);
+  list.add(31040);  
+  return list;
+  }
+  
+List<Integer> crystalCityMetro() {
+  List<Integer> list = new ArrayList<Integer>(stations.length);
+  list.add(31007);  
+  return list;
+  }
+  
+List<Integer> dupont() {
+  List<Integer> list = new ArrayList<Integer>(stations.length);
+  list.add(31200);  
+  return list;
+  }
+  
+List<Integer> unionstation() {
+  List<Integer> list = new ArrayList<Integer>(stations.length);
+  list.add(31623);  
+  return list;
+  }
+  
 List<Integer> lincoln() {
   List<Integer> list = new ArrayList<Integer>(stations.length);
   list.add(31258);  
+  return list;
+  }
+  
+List<Integer> gallaudet() {
+  List<Integer> list = new ArrayList<Integer>(stations.length);
+  list.add(31508);  
   return list;
   }
   
@@ -514,37 +704,122 @@ void findBusiestRoutes() {
       }
     }
   }
-
-void setStrokeWeight(int totalRiders) {
+  
+void drawRoutes() {
+  // draw all of the bezier curves, behind the other objects
+  if (displayMethod == BALANCES)
+    return;
+  float midx, midy;
+  int totalRiders;
+  noFill();  
+  for (int i = 0; i < stations.length; i++) {
+    for (int j = 0; j < stations.length; j++) {
+      if (i != j)  { 
+        midx = tripControlX[i][j];
+        midy = tripControlY[i][j];
+        totalRiders = tripRiders[i][j] + tripRidersCas[i][j];
+        if (totalRiders > 0 && mostRidersPerStation > 0) {  
+          if (displayMethod == CHARCOAL) {
+            strokeWeight(3); 
+            stroke(0,0,0, min(255, floor(256.0*5*totalRiders/192)));  // FIX: pre-calculate max val
+            }
+          else if (displayMethod == CLUSTER) { 
+            strokeWeight(totalRiders); 
+            if (stationInFocus[i] && stationInFocus[j]) {  // trips is between two valid stations
+              stroke(stayingColor);
+              ridersStaying += totalRiders;
+              }
+            else if (stationInFocus[i]) {
+              stroke(leavingColor);
+              ridersLeaving += totalRiders;
+              }
+            else {
+              stroke(enteringColor);
+              ridersEntering += totalRiders;
+              }
+            }
+          else {
+            strokeWeight(totalRiders); 
+            stroke(blend(c1t, c2t, (float)tripRidersCas[i][j]/totalRiders));  
+            } 
+          bezier(stationX[i], stationY[i], midx,midy,midx,midy, stationX[j], stationY[j]); 
+          } 
+        }
+      }
+    }
+  } 
+  
+void drawRiders(int frame) {
+  // draw approximate rider positions, on top of bezier curves
+  if (displayMethod == CHARCOAL || displayMethod == BALANCES) 
+    return;
+  CaBiTrip trip;
+  float midx, midy;
+  int outTime, inTime;
+  strokeWeight(2); 
+  for (int t = 0; t < validTrips.size(); t++) { 
+    trip = validTrips.get(t);
+    outTime = trip.bikeoutTime;
+    inTime = trip.bikeinTime;  
+    if (trip.acrossMidnight && frame < outTime - 15) {
+      outTime -= SECONDSperDAY;
+      inTime -= SECONDSperDAY;  
+      }
+    if (frame >= outTime - 15 && frame <= inTime + 15) {  
+      float scale = (float)(frame -  outTime)/(float)(inTime -  outTime);  
+      // determine the color
+      if (displayMethod == CLUSTER) {
+        if (min(frame, inTime) - outTime < 1800)  // under 30-min time limit, but don't turn red after bikein
+          fill(255, 255, 255, 255);
+        else if (stationInFocus[trip.bikeoutStation] && stationInFocus[trip.bikeinStation])  
+          fill(stayingColor);  
+        else if (stationInFocus[trip.bikeoutStation])  
+          fill(leavingColor);  
+        else  
+          fill(enteringColor);  
+        if (stationInFocus[trip.bikeoutStation] && stationInFocus[trip.bikeinStation])  
+          stroke(stayingColor);  
+        else if (stationInFocus[trip.bikeoutStation])  
+          stroke(leavingColor);  
+        else  
+          stroke(enteringColor);  
+        }
+      else {  // RIDERTYPE
+        if (min(frame, inTime) - outTime < 1800)  // under 30-min time limit, but don't turn red after bikein
+          fill(255, 255, 255, 255);
+        else if (trip.isRegistered)
+          fill(c1t);
+        else  
+          fill(c2t);
+        if (trip.isRegistered) 
+          stroke(c1t); 
+        else
+          stroke(c2t); 
+        } 
+      if (frame <= outTime)
+        ellipse(stationX[trip.bikeoutStation], stationY[trip.bikeoutStation], 4, 4);
+      else if (frame >= inTime) 
+        ellipse(stationX[trip.bikeinStation], stationY[trip.bikeinStation], 4, 4);
+      else {   
+        midx = tripControlX[trip.bikeoutStation][trip.bikeinStation];
+        midy = tripControlY[trip.bikeoutStation][trip.bikeinStation];
+        float x = bezierPoint(stationX[trip.bikeoutStation], midx, midx, stationX[trip.bikeinStation], scale);
+        float y = bezierPoint(stationY[trip.bikeoutStation], midy, midy, stationY[trip.bikeinStation], scale); 
+        ellipse(x, y, 5, 5); 
+        }
+      } 
+    } 
   }
 
-void animateTraffic() {  
-  int currentUsage;
-  int lastFrame = 24*60*60; 
-  int secondsPerFrame = 600;  // 60 or 240 or whatever
-  int[] balances = new int[stations.length];
-  int[] maxTraffic = new int[stations.length];
-  int[] totalTraffic = new int[stations.length];
-  for (int i = 0; i < stations.length; i++) {
-    balances[i] = 0;
-    maxTraffic[i] = 0;
-    totalTraffic[i] = 0;
-    }
-  // do the math in advance for all possible station pairs
-  int frameCount = 0;
-  Calendar cal = Calendar.getInstance(); 
-  String folder = "frames" + cal.get(Calendar.HOUR) + "-" + cal.get(Calendar.MINUTE) + "/";  
-  int imageNo = 0;
-  int maxMallBikes = 0;
-  int maxOtherBikes = 0;
-  float[] stationX = new float[stations.length];
-  float[] stationY = new float[stations.length];
+void initCurves() { 
+  stationX = new float[stations.length];
+  stationY = new float[stations.length];
   for (int i = 0; i < stations.length; i++) {
     stationX[i] = toX(lngs[i]);
     stationY[i] = toY(lats[i]);
     }
-  float[][] tripControlX = new float[stations.length][stations.length];
-  float[][] tripControlY = new float[stations.length][stations.length];
+  tripControlX = new float[stations.length][stations.length];
+  tripControlY = new float[stations.length][stations.length];
   for (int i = 0; i < stations.length; i++) {
     for (int j = 0; j < stations.length; j++) {
       float dx = stationX[i] - stationX[j];
@@ -554,17 +829,29 @@ void animateTraffic() {
       tripControlX[i][j] = (stationX[i] + stationX[j])/2 + bezierBulge*((float) Math.cos(theta));
       tripControlY[i][j] = (stationY[i] + stationY[j])/2 + bezierBulge*((float) Math.sin(theta)); 
       }
-    }
-  float midx, midy;
-  int regRiders;
-  int casRiders;
-  int totalRiders;
-  int ridersLeaving;
-  int ridersStaying;
-  int ridersEntering;
-  color halfAndHalf = blend(c1t, c2t, 0.5);
+    }  
   tripRiders = new int[stations.length][stations.length];
   tripRidersCas = new int[stations.length][stations.length];
+  }
+
+void animate24Hours() {  
+  int currentUsage;
+  int lastFrame = 24*60*60; 
+  int secondsPerFrame = 60;  // 60 or 240 or whatever
+  int[] maxTraffic = new int[stations.length]; 
+  int[] totalTraffic = new int[stations.length];
+  for (int i = 0; i < stations.length; i++) {
+    maxTraffic[i] = 0;
+    totalTraffic[i] = 0;
+    }
+  // do the math in advance for all possible station pairs
+  int frameCount = 0;
+  Calendar cal = Calendar.getInstance(); 
+  String folder = "frames" + cal.get(Calendar.HOUR) + "-" + cal.get(Calendar.MINUTE) + "/";  
+  int imageNo = 0;
+  initCurves();
+  int regRiders;
+  int casRiders;
   //
   // draw each frame of the animation
   //
@@ -583,9 +870,9 @@ void animateTraffic() {
       }
     // count riders for each station-pair
     CaBiTrip trip;
-    for (int t = 0; t < validTrips.size(); t++) { 
+    for (int t = 0; t < validTrips.size(); t++) { // move to drawRoutes?
       trip = validTrips.get(t);
-      if (frame > trip.bikeoutTime - 60 && frame < trip.bikeinTime + 60) {
+      if (frame > trip.bikeoutTime - 60 && frame < trip.bikeinTime + 60 || trip.acrossMidnight && frame < trip.bikeinTime + 60 - SECONDSperDAY) {
         if (trip.isRegistered) {
           tripRiders[trip.bikeoutStation][trip.bikeinStation]++;
           regRiders++;
@@ -595,102 +882,14 @@ void animateTraffic() {
           casRiders++;
           }
         stationInUse[trip.bikeinStation] = true;
-        stationInUse[trip.bikeinStation] = true; 
+        stationInUse[trip.bikeoutStation] = true; 
         }
       }
     background(bg);
-    noFill();  
     findBusiestRoutes();
-    // draw all of the bezier curves, behind the other objects
-    int xx = 0;
-    for (int i = 0; i < stations.length; i++) {
-      for (int j = 0; j < stations.length; j++) {
-        if (i != j)  { 
-          midx = tripControlX[i][j];
-          midy = tripControlY[i][j];
-          totalRiders = tripRiders[i][j] + tripRidersCas[i][j];
-          if (totalRiders > 0 && mostRidersPerStation > 0) { 
-            regRiders += tripRiders[i][j];
-            casRiders += tripRidersCas[i][j];
-  if (displayMethod == CHARCOAL) {
-    strokeWeight(3); 
-    stroke(0,0,0, min(255, floor(256.0*5*totalRiders/192)));  // FIX: pre-calculate max val
-    }
-  else if (displayMethod == CLUSTER) { 
-    strokeWeight(totalRiders); 
-    if (stationInFocus[i] && stationInFocus[j]) {  // trips is between two valid stations
-      stroke(stayingColor);
-      ridersStaying += totalRiders;
-      }
-    else if (stationInFocus[i]) {
-      stroke(leavingColor);
-      ridersLeaving += totalRiders;
-      }
-    else {
-      stroke(enteringColor);
-      ridersEntering += totalRiders;
-      }
-    }
-  else {
-    strokeWeight(totalRiders); 
-    stroke(blend(c1t, c2t, (float)tripRidersCas[i][j]/totalRiders));  
-    } 
-            bezier(stationX[i], stationY[i], midx,midy,midx,midy, stationX[j], stationY[j]); 
-            } 
-          }
-        }
-      }
-    //println(": " +  xx);
-    drawBackground();  // draw stations
-    stroke(0,0,0, 127);
-    strokeWeight(2);
-    fill(241, 241, 42); 
-    // draw approximate rider positions, on top of bezier curves
-    for (int t = 0; t < validTrips.size(); t++) { 
-      trip = validTrips.get(t);
-      if (frame >= trip.bikeoutTime - 15 && frame <= trip.bikeinTime + 15) {  
-        float scale = (float)(frame -  trip.bikeoutTime)/(float)(trip.bikeinTime -  trip.bikeoutTime);  
-        // determine the color
-        if (min(frame, trip.bikeinTime) - trip.bikeoutTime < 1800)  // under 30-min time limit, but don't turn red after bikein
-          fill(255, 255, 255, 255);
-        else if (trip.isRegistered)
-          fill(c1t);
-        else  
-          fill(c2t);
-        if (trip.isRegistered) 
-          stroke(c1t); 
-        else
-          stroke(c2t); 
-         
-        /*
-        if (min(frame, trip.bikeinTime) - trip.bikeoutTime < 1800)  // under 30-min time limit, but don't turn red after bikein
-          fill(255, 255, 255, 255);
-        else if (stationInFocus[trip.bikeoutStation] && stationInFocus[trip.bikeinStation])  
-          fill(stayingColor);  
-        else if (stationInFocus[trip.bikeoutStation])  
-          fill(leavingColor);  
-        else  
-          fill(enteringColor);  
-        if (stationInFocus[trip.bikeoutStation] && stationInFocus[trip.bikeinStation])  
-          stroke(stayingColor);  
-        else if (stationInFocus[trip.bikeoutStation])  
-          stroke(leavingColor);  
-        else  
-          stroke(enteringColor);  
-          */
-        if (frame <= trip.bikeoutTime)
-          ellipse(stationX[trip.bikeoutStation], stationY[trip.bikeoutStation], 4, 4);
-        else if (frame >= trip.bikeinTime) 
-          ellipse(stationX[trip.bikeinStation], stationY[trip.bikeinStation], 4, 4);
-        else {   
-          midx = tripControlX[trip.bikeoutStation][trip.bikeinStation];
-          midy = tripControlY[trip.bikeoutStation][trip.bikeinStation];
-          float x = bezierPoint(stationX[trip.bikeoutStation], midx, midx, stationX[trip.bikeinStation], scale);
-          float y = bezierPoint(stationY[trip.bikeoutStation], midy, midy, stationY[trip.bikeinStation], scale); 
-          ellipse(x, y, 5, 5); 
-          }
-        } 
-      } 
+    drawRoutes();
+    drawStations(0);  // draw stations 
+    drawRiders(frame);
     if (floor((float)histogramWidth*frame/lastFrame) >= tickCount && tickCount < histogramWidth - 1) { 
       // add a column to the histogram
       groupA[tickCount] = regRiders;
@@ -701,12 +900,9 @@ void animateTraffic() {
       tickCount++;  
       println(100*frame/lastFrame + "%"); 
       } 
-    maxMallBikes = max(maxMallBikes, regRiders);
-    maxOtherBikes = max(maxOtherBikes, casRiders); 
     frameCount++;
-    drawHistogram(frame); 
-    saveFrame(folder + "image-" + nf(imageNo++, 5) + ".png"); 
-    //imageNo++;
+    drawKey(toHHMM(frame)); 
+    saveFrame(folder + "image-" + nf(imageNo++, 5) + ".png");  
     for (int i = 0; i < stations.length; i++) {
       currentUsage = 0;
       for (int j = 0; j < stations.length; j++) {
@@ -719,116 +915,190 @@ void animateTraffic() {
   for (int i = 0; i < stations.length; i++)  
     if (totalTraffic[i] > 0 && totalTraffic[i]/imageNo > 0)
       println(maxTraffic[i]/(totalTraffic[i]/imageNo) + " (" + maxTraffic[i] + " / " + (totalTraffic[i]/imageNo) + ") " + stopName[i]);
+  println("maxBusiest = " + maxBusiest);
+  println("maxRidersPerRoute = " + maxRidersPerRoute);
   }
+  
+void drawCircle(float x, float y, color dotColor, boolean blended, int radius) {
+  if (radius <= 0)
+    return;
+  int di = radius*2 - 1; 
+  if (true) {
+    // use a more transparent methos
+    PGraphics tempPage = createGraphics(di, di, JAVA2D);
+    tempPage.beginDraw();
+    tempPage.background(0);
+    tempPage.noStroke();
+    tempPage.fill(dotColor);  
+    tempPage.ellipse(radius, radius, di, di);
+    tempPage.endDraw();
+    blend(tempPage, 0, 0, di, di, round(x) - radius, round(y) - radius, di, di, ADD);
+    }
+  else {
+    // draw circles on top of each other
+    fill(dotColor); 
+    ellipse(x, y, di, di);
+    }
+  }   
 
-void animateBalances() {  
+void animateStartToFinish() {    
+  Calendar currentDate = new GregorianCalendar(minDate.get(Calendar.YEAR), minDate.get(Calendar.MONTH), minDate.get(Calendar.DAY_OF_MONTH), minDate.get(Calendar.HOUR_OF_DAY), 0, 0);
+  Calendar nextDate = (Calendar) currentDate.clone();   // screwed up???
+  println("Date range: " + currentDate.getTime() + " to " + maxDate.getTime()); 
   // do the math in advance for all possible station pairs
-  int radius;
   int frameCount = 0;
   Calendar cal = Calendar.getInstance(); 
   String folder = "frames" + cal.get(Calendar.HOUR) + "-" + cal.get(Calendar.MINUTE) + "/";  
   int imageNo = 0;
-  int maxMallBikes = 0;
-  int maxOtherBikes = 0;
-  float[] stationX = new float[stations.length];
-  float[] stationY = new float[stations.length];
+  initCurves();
+  println("processing " + validTrips.size() + " trips"); 
+  long startInMillis = minDate.getTimeInMillis();
+  long timespan = maxDate.getTimeInMillis() - startInMillis;
+  long minutesBetween = floor(timespan/60000);
+  println("minutesBetween = "+ minutesBetween);
+  long minutesPerFrame = 400*60;
+  long millisPerFrame = minutesPerFrame*60000;
+  int frames = (int)(minutesBetween/minutesPerFrame) + 1;
+  balances = new int[stations.length][frames]; 
+  balanceSum = new int[stations.length]; 
   for (int i = 0; i < stations.length; i++) {
-    stationX[i] = toX(lngs[i]);
-    stationY[i] = toY(lats[i]);
+    for (int j = 0; j < frames; j++)
+      balances[i][j] = 0;
+    balanceSum[i] = 0;
     }
-  float[][] tripControlX = new float[stations.length][stations.length];
-  float[][] tripControlY = new float[stations.length][stations.length];
-  for (int i = 0; i < stations.length; i++) {
-    for (int j = 0; j < stations.length; j++) {
-      float dx = stationX[i] - stationX[j];
-      float dy = stationY[i] - stationY[j]; 
-      float bezierBulge = (float) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2))/16;  // 16 is arbitrary!
-      float theta = (float) (Math.atan2(dy, dx) + Math.PI/2);  // shifted 90 degrees 
-      tripControlX[i][j] = (stationX[i] + stationX[j])/2 + bezierBulge*((float) Math.cos(theta));
-      tripControlY[i][j] = (stationY[i] + stationY[j])/2 + bezierBulge*((float) Math.sin(theta)); 
-      }
+  CaBiTrip trip; 
+  for (int t = 0; t < validTrips.size(); t++) { 
+    trip = validTrips.get(t);
+    balances[trip.bikeoutStation][floor((trip.bikeoutDayTime.getTimeInMillis() - startInMillis)/millisPerFrame)]--; 
+    balances[trip.bikeinStation][floor((trip.bikeinDayTime.getTimeInMillis() - startInMillis)/millisPerFrame)]++; 
     }
-  float midx, midy;
-  int lastFrame = 24*60*60;
+  println("============================="); 
   int regRiders;
   int casRiders;
-  int totalRiders;
-  int[][] tripRiders = new int[stations.length][stations.length];
-  int[][] tripRidersCas = new int[stations.length][stations.length];
+  tripRiders = new int[stations.length][stations.length];
+  tripRidersCas = new int[stations.length][stations.length];
   //
   // draw each frame of the animation
   //
-  println("processing " + validTrips.size() + " trips"); 
-  println("============================="); 
-  for (int frame = 0; frame <= lastFrame; frame += 60) { 
-  for (int rs = 0; rs < stations.length; rs++) { 
-    if (stationInFocus[rs]) 
-      radius = 9;
-    else
-      radius = 7;
-    if (stationInUse[rs]) {
-      stroke(0, 255);
-      fill(255, 255); 
-      }
-    else {  
-      stroke(0, 159);
-      fill(255, 159); 
-      }
-    ellipse(toX(lngs[rs]), toY(lats[rs]), radius, radius);
-    } 
-    CaBiTrip trip;
-    background(bg);
-    noFill();  
-    // draw all of the bezier curves, behind the other objects
-    for (int i = 0; i < stations.length; i++) 
+  noStroke();
+  int radius;
+  color fillColor;
+  for (int f = 0; f < frames; f++) {
+    regRiders = 0; casRiders = 0; 
+    // initialize station-pair count to zero
+    for (int i = 0; i < stations.length; i++) {
       for (int j = 0; j < stations.length; j++) {
-        if (i != j)  { 
-          midx = tripControlX[i][j];
-          midy = tripControlY[i][j];
-          totalRiders = tripRiders[i][j] + tripRidersCas[i][j];
-          if (totalRiders > 0) { 
-            strokeWeight(totalRiders); 
-            stroke(blend(c1t, c2t, (float)tripRidersCas[i][j]/totalRiders));  
-            bezier(stationX[i], stationY[i], midx,midy,midx,midy, stationX[j], stationY[j]); 
-            } 
-          }
+        tripRiders[i][j] = 0; 
+        tripRidersCas[i][j] = 0;
         }
-    drawBackground();  // draw stations
-    stroke(0,0,0, 127);
-    strokeWeight(2);
-    fill(241, 241, 42); 
+      stationInUse[i] = false;
+      }
+    // count riders for each station-pair 
     for (int t = 0; t < validTrips.size(); t++) { 
       trip = validTrips.get(t);
-      if (frame >= trip.bikeoutTime - 15 && frame <= trip.bikeinTime + 15) {  
-        float scale = (float)(frame -  trip.bikeoutTime)/(float)(trip.bikeinTime -  trip.bikeoutTime);  
-        // determine the color
-        if (min(frame, trip.bikeinTime) - trip.bikeoutTime < 1800)  // under 30-min time limit, but don't turn red after bikein
-          fill(255, 255, 255, 255);
-        else if (trip.isRegistered)
-          fill(c1t);
-        else  
-          fill(c2t);
-        if (trip.isRegistered) 
-          stroke(c1t); 
-        else
-          stroke(c2t); 
-        if (frame <= trip.bikeoutTime)
-          ellipse(stationX[trip.bikeoutStation], stationY[trip.bikeoutStation], 4, 4);
-        else if (frame >= trip.bikeinTime) 
-          ellipse(stationX[trip.bikeinStation], stationY[trip.bikeinStation], 4, 4);
-        else {   
-          midx = tripControlX[trip.bikeoutStation][trip.bikeinStation];
-          midy = tripControlY[trip.bikeoutStation][trip.bikeinStation];
-          float x = bezierPoint(stationX[trip.bikeoutStation], midx, midx, stationX[trip.bikeinStation], scale);
-          float y = bezierPoint(stationY[trip.bikeoutStation], midy, midy, stationY[trip.bikeinStation], scale); 
-          ellipse(x, y, 5, 5); 
+      if (!currentDate.after(trip.bikeinDayTime) && nextDate.after(trip.bikeoutDayTime)) {  /// oh #%$@!
+        if (trip.isRegistered) {
+          tripRiders[trip.bikeoutStation][trip.bikeinStation]++;
+          regRiders++;
           }
+        else {
+          tripRidersCas[trip.bikeoutStation][trip.bikeinStation]++;
+          casRiders++;
+          }
+        stationInUse[trip.bikeinStation] = true;
+        stationInUse[trip.bikeoutStation] = true; 
+        }
+      }
+    background(bg);
+    drawStations(f); 
+    drawKey(minDate.getTime().toString()); 
+    currentDate.add(Calendar.MINUTE, (int) minutesPerFrame);
+    nextDate.add(Calendar.MINUTE, (int) minutesPerFrame);
+    frameCount++; 
+    saveFrame(folder + "image-" + nf(imageNo++, 5) + ".png"); 
+    if (f % 16 == 0)   
+      println(100*f/frames + "%%"); 
+    } 
+  }
+
+void animateSweepingPeriod() {  
+  int frameCount = 0;
+  println("SWEEPING!");
+  Calendar currentDate = new GregorianCalendar(minDate.get(Calendar.YEAR), minDate.get(Calendar.MONTH), minDate.get(Calendar.DAY_OF_MONTH), minDate.get(Calendar.HOUR_OF_DAY), 0, 0);
+  Calendar nextDate = (Calendar) currentDate.clone(); 
+  nextDate.add(Calendar.DATE, 7);
+  println("Date range: " + currentDate.getTime() + " to " + maxDate.getTime()); 
+  // do the math in advance for all possible station pairs 
+  Calendar cal = Calendar.getInstance(); 
+  String folder = "frames" + cal.get(Calendar.HOUR) + "-" + cal.get(Calendar.MINUTE) + "/";  
+  int imageNo = 0; 
+  for (int i = 0; i < stations.length; i++) { 
+    stationInUse[i] = true;
+    }  
+  println("processing " + validTrips.size() + " trips"); 
+  long startInMillis = minDate.getTimeInMillis();
+  long timespan = maxDate.getTimeInMillis() - startInMillis;
+  long minutesBetween = floor(timespan/60000);
+  println("minutesBetween = "+ minutesBetween);
+  long minutesPerFrame = 8*60;
+  long millisPerFrame = minutesPerFrame*60000;
+  int frames = (int)((minutesBetween - 7*24*60)/minutesPerFrame) + 1; 
+  CaBiTrip trip;  
+  println("============================="); 
+  initCurves();
+  int regRiders;
+  int casRiders;
+  tripRiders = new int[stations.length][stations.length];
+  tripRidersCas = new int[stations.length][stations.length];
+  //
+  // draw each frame of the animation
+  //
+  noStroke();
+  SimpleDateFormat formatter = new SimpleDateFormat("MMM d yyyy h:mma");
+  int radius;
+  color fillColor;
+  for (int f = 0; f <= frames; f++) {
+    regRiders = 0; casRiders = 0; 
+    // initialize station-pair count to zero
+    for (int i = 0; i < stations.length; i++) {
+      for (int j = 0; j < stations.length; j++) {
+        tripRiders[i][j] = 0; 
+        tripRidersCas[i][j] = 0;
         } 
-      }  
-    println(100*frame/lastFrame + "%");   
-    frameCount++;
-    drawHistogram(frame);
-    saveFrame(folder + "image-" + nf(imageNo++, 5) + ".png");
+      }
+    // count riders for each station-pair 
+    for (int t = 0; t < validTrips.size(); t++) { 
+      trip = validTrips.get(t);
+      if (!currentDate.after(trip.bikeinDayTime) && nextDate.after(trip.bikeoutDayTime)) {  /// oh #%$@!
+        if (trip.isRegistered) {
+          tripRiders[trip.bikeoutStation][trip.bikeinStation]++;
+          regRiders++;
+          }
+        else {
+          tripRidersCas[trip.bikeoutStation][trip.bikeinStation]++;
+          casRiders++;
+          } 
+        }
+      }
+    //println(regRiders, casRiders, currentDate.getTime(), nextDate.getTime());
+    background(bg);
+    findBusiestRoutes();
+    drawRoutes();
+    drawStations(0); 
+    if (floor((float)histogramWidth*f/frames) >= tickCount && tickCount < histogramWidth - 1) { 
+      // add a column to the histogram
+      groupA[tickCount] = regRiders;
+      groupB[tickCount] = casRiders;
+      tickCount++;  
+      println(100*f/frames + "%"); 
+      } 
+    drawKey(formatter.format(currentDate.getTime()) + " - " + formatter.format(nextDate.getTime())); 
+    frameCount++; 
+    if (currentDate.after(maxDate))
+      println("ERROR: animating past data source");
+    saveFrame(folder + "image-" + nf(imageNo++, 5) + ".png"); 
+    currentDate.add(Calendar.MINUTE, (int) minutesPerFrame);
+    nextDate.add(Calendar.MINUTE, (int) minutesPerFrame);
     } 
   }
 
@@ -840,8 +1110,9 @@ void setColors(color colorA, color colorB) {
   }
 
 void setup() {
+  lightmap = false;
   validTrips = new ArrayList<CaBiTrip>(2000000);  // guess 2 million records
-  displayMethod = RIDERTYPE;
+  displayMethod = RIDERTYPE;  // choose CLUSTER or CHARCOAL or RIDERTYPE or BALANCES or SWEEP
   enteringColorSolid = color(red(enteringColor), green(enteringColor), blue(enteringColor), 204);   
   stayingColorSolid = color(red(stayingColor), green(stayingColor), blue(stayingColor), 204);   
   leavingColorSolid = color(red(leavingColor), green(leavingColor), blue(leavingColor), 204);     
@@ -858,29 +1129,62 @@ void setup() {
   setBoundary("shaw640x480.png", 38.9050, -77.0357, 38.9210, -77.0082, 640, 480, q7th(), "Wonder Bread Factory"); 
   setBoundary("dc-cc450x600.png", 38.8318, -77.0861, 38.9119, -77.0090, 450, 600, all(), "Capital Bikeshare"); 
   setBoundary("dc-core800x600.png", 38.8404, -77.1031, 38.9204, -76.9659, 800, 600, all(), "Capital Bikeshare"); 
-  setBoundary("dc-core800x600.png", 38.8469, -77.1031, 38.9270, -76.9659, 800, 600, all(), "Capital Bikeshare"); 
   setBoundary("crystalcity480x320.png", 38.8369, -77.0904, 38.8795, -77.0082, 480, 320, greaterCrystalCity(), "Crystal City"); 
   setBoundary("lincoln640x480.png", 38.8750, -77.0725, 38.9070, -77.0177, 640, 480, lincoln(), "Lincoln Memorial"); 
-  setBoundary("washington440x660.png", 38.7851, -77.2243, 39.1370, -76.9228, 440, 660, all(), "Capital Bikeshare");
   setBoundary("jeffersonmemorial640x480.png", 38.8644, -77.0719, 38.8964, -77.0171, 640, 480, jefferson(), "Jefferson Memorial"); 
+  setBoundary("dc-core800x600dark.png", 38.8469, -77.1031, 38.9270, -76.9659, 800, 600, all(), "Capital Bikeshare"); 
+  setBoundary("gallaudet640x480.png", 38.8953, -77.0096, 38.9113, -76.9821, 640, 480, gallaudet(), "Gallaudet");
+  setBoundary("washington440x660.png", 38.7851, -77.2243, 39.1370, -76.9228, 440, 660, all(), "Capital Bikeshare");
+  setBoundary("clarendon660x440.png", 38.8795, -77.1086, 38.8941, -77.0803, 660, 440, gmu(), "GMU Founders Hall");
+  setBoundary("lincoln800x600dark.png", 38.8716, -77.0725, 38.9116, -77.0039, 800, 600, lincoln(), "Lincoln Memorial");
+  setBoundary("unionstation800x600dark.png", 38.8733, -77.0512, 38.9133, -76.9826, 800, 600, unionstation(), "Union Station");
+  setBoundary("dupont800x600dark.png", 38.8836, -77.0720, 38.9236, -77.0034, 800, 600, dupont(), "Dupont Circle");
+  setBoundary("gallaudet440x660.png", 38.8893, -77.0058, 38.9113, -76.9870, 440, 660, gallaudet(), "Gallaudet");
+  setBoundary("gallaudet800x600dark.png", 38.8799, -77.0448, 38.9200, -76.9762, 800, 600, gallaudet(), "Gallaudet");
+  setBoundary("crystalcity640x480dark.png", 38.8388, -77.0742, 38.8708, -77.0193, 640, 480, crystalCityMetro(), "Crystal City");
+  setBoundary("crystalcity800x600dark.png", 38.8412, -77.0875, 38.8813, -77.0190, 800, 600, crystalCityMetro(), "Crystal City");
+  setBoundary("dc800x600dark.png", 38.8360, -77.1717, 38.9960, -76.8974, 800, 600, all(), "Capital Bikeshare");
+  setBoundary("crystalcity480x320.png", 38.8369, -77.0904, 38.8795, -77.0082, 480, 320, greaterCrystalCity(), "Crystal City");
   //setDatasource("/Users/michael/mvjantzen.com/cabi/data/2011-4th-quarter.csv", 4, 7, 2, 5, 9);
-  setDatasource("/Users/michael/mvjantzen.com/cabi/data/2014-1st-quarter.csv", 3, 6, 1, 4, 8);
-  setDatasource("/Users/michael/mvjantzen.com/cabi/data/2014-Q2-Trips-History-Data.csv", 3, 6, 1, 4, 8);
+  //setDatasource("/Users/michael/mvjantzen.com/cabi/data/2012-4th-quarter.csv", 3, 6, 1, 4, 8);
+  //setDatasource("/Users/michael/mvjantzen.com/cabi/data/2013-1st-quarter.csv", 3, 6, 1, 4, 8);
+  //setDatasource("/Users/michael/mvjantzen.com/cabi/data/2013-2nd-quarter.csv", 3, 6, 1, 4, 8);
+  //setDatasource("/Users/michael/mvjantzen.com/cabi/data/2013-3rd-quarter.csv", 3, 6, 1, 4, 8);
+  //setDatasource("/Users/michael/mvjantzen.com/cabi/data/2013-4th-quarter.csv", 3, 6, 1, 4, 8);
+  //setDatasource("/Users/michael/mvjantzen.com/cabi/data/2014-1st-quarter.csv", 3, 6, 1, 4, 8);
+  //setDatasource("/Users/michael/mvjantzen.com/cabi/data/2014-Q2-Trips-History-Data.csv", 3, 6, 1, 4, 8);
   setDatasource("/Users/michael/mvjantzen.com/cabi/data/2014-Q3-Trips-History-Data.csv", 3, 6, 1, 4, 8);
-  setColors(color(93,110,182), color(201, 62, 103));
-  //getStats();
-  histogramWidth = 300; 
-  groupA = new int[histogramWidth];    
-  groupB = new int[histogramWidth]; 
-  into = new int[histogramWidth]; 
-  within = new int[histogramWidth]; 
-  outof = new int[histogramWidth]; 
+  //setDatasource("/Users/michael/mvjantzen.com/cabi/data/2014-jul-1-7.csv", 3, 6, 1, 4, 8);
+  dataTitle = "Jul 1 - 7, 2014";
+  println("Date range: " + minDate.getTime() + " to " + maxDate.getTime());
+  if (lightmap)
+    setColors(color(93,110,182), color(201, 62, 103));  
+  else
+    setColors(color(254,204,47), color(252, 48, 29));  // yellow, red
+    //setColors(color(153,228,132), color(245, 160, 210));  // green, pink
+    //setColors(color(86,192,94), color(245, 148, 53));      // green, orange
+  getStats();
+  histogramWidth = 225; 
+  groupA = new int[histogramWidth];
+  groupB = new int[histogramWidth];
+  into = new int[histogramWidth];
+  within = new int[histogramWidth];
+  outof = new int[histogramWidth];
   size(swidth, sheight, JAVA2D);
-  println("============================="); 
-  animateTraffic();  
-  println("maxBusiest = " + maxBusiest);
-  println("maxRidersPerRoute = " + maxRidersPerRoute);
-  println("!!!"); 
+  println("=============================");
+  if (displayMethod == SWEEP) {
+    subTitle = "Trips per Week";
+    animateSweepingPeriod();
+    }
+  else if (displayMethod == BALANCES) {
+    subTitle = "Balances";
+    animateStartToFinish();
+    }
+  else {
+    subTitle = "24-hour cycle";
+    animate24Hours();
+    }
+  println("!!!");
   }
 
 void draw() {   
